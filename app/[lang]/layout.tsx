@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Anton, Inter } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -63,7 +64,10 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
 
   return (
     <html lang={localeTags[lang]} data-scroll-behavior="smooth" className={`${anton.variable} ${inter.variable}`}>
-      <body className="min-h-dvh overflow-x-clip">{children}</body>
+      <body className="min-h-dvh overflow-x-clip">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
