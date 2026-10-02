@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+/* ── Brand tokens ─────────────────────────────────────────────── */
+@theme {
+  --color-ink: #0b0b0b;
+  --color-ink-2: #131313;
+  --color-ink-3: #1c1c1c;
+  --color-joker: #e11d2e;
+  --color-joker-light: #ff4d5b;
+  --color-cheese: #ffc531;
+  --color-cream: #f6efe4;
+
+  --ease-snap: cubic-bezier(0.2, 0.9, 0.1, 1);
+
+  --animate-ticker: ticker 38s linear infinite;
+  --animate-kenburns: kenburns 24s ease-in-out infinite alternate;
+  --animate-steam: steam 8s ease-out infinite;
+  --animate-ember: ember 7s linear infinite;
+  --animate-flicker: flicker 6s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-rise: rise 0.8s var(--ease-snap) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes ticker {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes kenburns {
+    from {
+      transform: scale(1.02);
+    }
+    to {
+      transform: scale(1.1) translate3d(0, -1.5%, 0);
+    }
+  }
+  @keyframes steam {
+    0% {
+      transform: translate3d(0, 25%, 0) scale(0.6);
+      opacity: 0;
+    }
+    25% {
+      opacity: var(--steam-opacity, 0.5);
+    }
+    100% {
+      transform: translate3d(var(--drift, 12%), -130%, 0) scale(1.7);
+      opacity: 0;
+    }
+  }
+  @keyframes ember {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(var(--drift, 24px), -55vh, 0) scale(0.4);
+      opacity: 0;
+    }
+  }
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    40% {
+      opacity: 0.85;
+    }
+    55% {
+      opacity: 0.5;
+    }
+    72% {
+      opacity: 0.8;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(var(--rot, 0deg));
+    }
+    50% {
+      transform: translate3d(0, -14px, 0) rotate(calc(var(--rot, 0deg) + 3deg));
+    }
+  }
+}
+
+@theme inline {
+  --font-display: var(--font-anton), Impact, "Arial Narrow Bold", sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-cheese);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cheese);
+    outline-offset: 3px;
+  }
+}
+
+/* ── Utilities ────────────────────────────────────────────────── */
+
+/* Film grain over dark surfaces. */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Classic playing-card back: red with a fine diamond lattice. */
+@utility card-back {
+  background-color: var(--color-joker);
+  background-image:
+    radial-gradient(circle at 50% 50%, rgb(0 0 0 / 0) 40%, rgb(0 0 0 / 0.28) 100%),
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 0.12) 0 1.5px, transparent 1.5px 12px),
+    repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.12) 0 1.5px, transparent 1.5px 12px);
+}
+
+/* Faint suit pattern for section backgrounds. */
+@utility suit-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='%23f6efe4' fill-opacity='.035'%3E%3Cpath d='M24 10c-4 5-10 9-10 14a5.5 5.5 0 0 0 9 4.2c-.3 2.5-1.3 4.4-3 5.8h8c-1.7-1.4-2.7-3.3-3-5.8A5.5 5.5 0 0 0 34 24c0-5-6-9-10-14z'/%3E%3Cpath d='M72 62l9 12-9 12-9-12z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@utility text-outline {
+  -webkit-text-stroke: 2px currentColor;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Motion preferences ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
